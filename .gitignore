@@ -90,3 +90,6 @@ client/build
 
 # DynamoDB Local files
 .dynamodb/
+
+# Upload files
+client/public/uploads
