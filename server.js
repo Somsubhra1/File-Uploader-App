@@ -13,8 +13,12 @@ app.post("/upload", (req, res) => {
     }
     const file = req.files.file;
 
-    if (process.env.NODE_ENV === "production") {
-        file.mv(`${__dirname}/client/build/uploads/${file.name}`, err => {
+    // Moving file to uploads directory
+    file.mv(
+        `${__dirname}/client/${
+            process.env.NODE_ENV === "production" ? "build" : "public"
+        }/uploads/${file.name}`,
+        err => {
             if (err) {
                 console.error(err);
                 return res.status(500).json(err);
@@ -23,19 +27,8 @@ app.post("/upload", (req, res) => {
                 fileName: file.name,
                 filePath: `uploads/${file.name}`
             });
-        });
-    } else {
-        file.mv(`${__dirname}/client/public/uploads/${file.name}`, err => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json(err);
-            }
-            res.json({
-                fileName: file.name,
-                filePath: `uploads/${file.name}`
-            });
-        });
-    }
+        }
+    );
 });
 
 // Serve static assets if it's production environment
